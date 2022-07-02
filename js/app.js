@@ -244,7 +244,7 @@ function eliminarCita(id) {
 }
 
 function cargarEdicion(cita) {
-    const { mascota, propietario, telefono, fecha, hora, sintomas } = cita;
+    const { mascota, propietario, telefono, fecha, hora, sintomas, id } = cita;
 
     // Llenar los inputs
     mascotaInput.value = mascota;
@@ -261,6 +261,7 @@ function cargarEdicion(cita) {
     citaObj.fecha = fecha;
     citaObj.hora = hora;
     citaObj.sintomas = sintomas;
+    citaObj.id = id;
 
     // Cambiar el texto del boton 
     formulario.querySelector('button[type="submit"]').textContent = 'Guardar Cambios';
