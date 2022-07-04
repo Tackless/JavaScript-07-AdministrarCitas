@@ -5,7 +5,7 @@ import { mascotaInput, propietarioInput, telefonoInput, fechaInput, horaInput, s
 const ui = new UI();
 const administrarCitas = new Citas();
 
-let DB;
+export let DB;
 let editando;
 
 // Objeto con la información de cita
@@ -83,7 +83,7 @@ export function nuevaCita(e) {
     formulario.reset();
 
     // Mostrar el HTML de las citas
-    ui.imprimirCitas(administrarCitas);
+    ui.imprimirCitas();
 }
 
 // Reiniciar Objeto
@@ -104,7 +104,7 @@ export function eliminarCita(id) {
     ui.imprimirAlerta('La cita se eliminó correctamente', 'exito');
 
     // Refrescar las citas
-    ui.imprimirCitas(administrarCitas);
+    ui.imprimirCitas();
 }
 
 export function cargarEdicion(cita) {
@@ -146,6 +146,9 @@ export function crearDB() {
     // Si todo bien
     crearDB.onsuccess = function() {
         DB = crearDB.result;
+
+        // Mostrar citas al cargar con IndexedDB cargado
+        ui.imprimirCitas();
     }
 
     // Definir el schema

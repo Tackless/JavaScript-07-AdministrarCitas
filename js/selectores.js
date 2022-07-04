@@ -8,4 +8,5 @@ export const sintomasInput = document.querySelector('#sintomas');
 
 // UI
 export const formulario = document.querySelector('#nueva-cita');
+export const heading = document.querySelector('#administra');
 export const contenedorCitas = document.querySelector('#citas');
