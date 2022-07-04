@@ -36,18 +36,27 @@ export function nuevaCita(e) {
     }
 
     if (editando) {
-        // Mostrar mensaje
-        ui.imprimirAlerta('La cita se editó correctamente', 'exito');
-
         // Pasar el objeto de la cita a edicion
         administrarCitas.editarCita({...citaObj}); // Se pasa una copia del objeto para que no se modifiquen los demás
 
-        // Cambiar el texto del boton 
-        formulario.querySelector('button[type="submit"]').textContent = 'Crear cita';
+        // Edita en IndexedDB
+        const transaction = DB.transaction(['citas'], 'readwrite');
+        const objectStore = transaction.objectStore('citas');
 
-        // Quitar modo edicion
-        editando = false;
+        // Actualizar registro en DB 
+        objectStore.put(citaObj);
 
+        transaction.oncomplete = () => {
+
+            // Mostrar mensaje
+            ui.imprimirAlerta('La cita se editó correctamente', 'exito');
+
+            // Cambiar el texto del boton 
+            formulario.querySelector('button[type="submit"]').textContent = 'Crear cita';
+
+            // Quitar modo edicion
+            editando = false;
+        }
     } else {
         // Generar un ID unico
         citaObj.id = Date.now();
