@@ -107,13 +107,24 @@ export function reiniciarObjeto() {
 
 export function eliminarCita(id) {
     // Eliminar la cita
-    administrarCitas.eliminarCita(id);
+    const transaction = DB.transaction(['citas'], 'readwrite');
+    const objectStore = transaction.objectStore('citas');
 
-    // Mostrar un mensaje
-    ui.imprimirAlerta('La cita se eliminó correctamente', 'exito');
+    objectStore.delete(id);
 
-    // Refrescar las citas
-    ui.imprimirCitas();
+    transaction.oncomplete = () => {
+        // Mostrar un mensaje
+        ui.imprimirAlerta('La cita se eliminó correctamente', 'exito');
+
+        // Refrescar las citas
+        ui.imprimirCitas();
+    }
+
+    // Si error
+    transaction.onerror = function() {
+        // Mostar mensaje 
+        ui.imprimirAlerta('Hubo un error al eliminar de la base de datos', 'error');
+    }
 }
 
 export function cargarEdicion(cita) {
@@ -149,7 +160,8 @@ export function crearDB() {
 
     // Si error
     crearDB.onerror = function() {
-        console.log('hubo un error');
+        // Mostar mensaje 
+        ui.imprimirAlerta('Hubo un error al crear la base de datos', 'error');
     }
 
     // Si todo bien
